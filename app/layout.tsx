@@ -1,9 +1,12 @@
+import { ClerkProvider } from '@clerk/nextjs';
 import { Inter as FontSans } from 'next/font/google';
 
 import './globals.css';
 
 import { cn } from '@/lib/utils';
 import { Metadata } from 'next';
+import { dark } from '@clerk/themes';
+import Provider from './Provider';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -21,15 +24,25 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html
-      lang='en'
-      suppressHydrationWarning
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        variables: { colorPrimary: '#3371FF', fontSize: '16px' },
+      }}
     >
-      <body
-        className={cn('min-h-screen font-sans antialiased', fontSans.variable)}
+      <html
+        lang='en'
+        suppressHydrationWarning
       >
-        {children}
-      </body>
-    </html>
+        <body
+          className={cn(
+            'min-h-screen font-sans antialiased',
+            fontSans.variable
+          )}
+        >
+          <Provider>{children}</Provider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
